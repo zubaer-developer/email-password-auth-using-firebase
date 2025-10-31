@@ -1,6 +1,7 @@
 import {
   createUserWithEmailAndPassword,
   sendEmailVerification,
+  updateProfile,
 } from "firebase/auth";
 import React, { useState } from "react";
 import { auth } from "../../firebase/firebase";
@@ -17,7 +18,9 @@ const Register = () => {
     const email = event.target.email.value;
     const password = event.target.password.value;
     const terms = event.target.term.checked;
-    console.log("register clicked", email, password);
+    const name = event.target.name.value;
+    const photoUrl = event.target.photourl.value;
+    console.log("register clicked", email, password, name, photoUrl);
 
     // reset status: success or error
     setError("");
@@ -46,6 +49,17 @@ const Register = () => {
         setSuccess(true);
         event.target.reset();
 
+        // update profile
+        const profile = {
+          displayName: name,
+          photoURL: photoUrl,
+        };
+        updateProfile(result.user, profile)
+          .then(() => {
+            console.log("Profile Updated");
+          })
+          .catch();
+
         // email verification
         sendEmailVerification(result.user).then(() => {
           alert("verify your email address");
@@ -70,6 +84,22 @@ const Register = () => {
             <h1 className="text-5xl font-bold">Register now!</h1>
             <form onSubmit={handleRegister}>
               <fieldset className="fieldset">
+                {/* Name */}
+                <label className="label">Name</label>
+                <input
+                  name="name"
+                  type="text"
+                  className="input"
+                  placeholder="Your Name"
+                />
+                {/* Photo URL */}
+                <label className="label">Photo URL</label>
+                <input
+                  name="photourl"
+                  type="text"
+                  className="input"
+                  placeholder="Photo URL"
+                />
                 <label className="label">Email</label>
                 <input
                   name="email"

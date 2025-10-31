@@ -11,9 +11,16 @@ const Login = () => {
     const email = event.target.email.value;
     const password = event.target.password.value;
     console.log(email, password);
+
+    // Reset Message: error or success
+    setError("");
+
     signInWithEmailAndPassword(auth, email, password)
       .then((result) => {
         console.log(result.user);
+        if (!result.user.emailVerified) {
+          alert("Please verify your email address");
+        }
       })
       .catch((error) => {
         console.log(error.message);

@@ -3,11 +3,30 @@ import { createRoot } from "react-dom/client";
 import "./index.css";
 import App from "./App.jsx";
 import { createBrowserRouter, RouterProvider } from "react-router";
+import Root from "./layouts/Root.jsx";
+import { Children } from "react";
+import Home from "./components/Home/Home.jsx";
+import Register from "./components/Register/Register.jsx";
+import Login from "./components/Login/Login.jsx";
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <button className="btn btn-primary">Primary</button>,
+    Component: Root,
+    children: [
+      {
+        index: true,
+        Component: Home,
+      },
+      {
+        path: "/register",
+        Component: Register,
+      },
+      {
+        path: "/login",
+        Component: Login,
+      },
+    ],
   },
 ]);
 

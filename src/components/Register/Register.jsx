@@ -1,13 +1,28 @@
 import { createUserWithEmailAndPassword } from "firebase/auth";
-import React from "react";
+import React, { useState } from "react";
 import { auth } from "../../firebase/firebase";
+import { Link } from "react-router";
 
 const Register = () => {
+  const [error, setError] = useState("");
+
   const handleRegister = (event) => {
     event.preventDefault();
     const email = event.target.email.value;
     const password = event.target.password.value;
     console.log("register clicked", email, password);
+
+    const passwordPattern =
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*[^\w\d\s])(?=.{6,}).*$/;
+    if (!passwordPattern.test(password)) {
+      console.log(
+        "password at least 6 characters, one upper case, one lower case, one special character"
+      );
+      setError(
+        "password at least 6 characters, one upper case, one lower case, one special character"
+      );
+      return;
+    }
 
     createUserWithEmailAndPassword(auth, email, password)
       .then((result) => {
@@ -47,7 +62,12 @@ const Register = () => {
                 </div>
                 <button className="btn btn-neutral mt-4">Register</button>
               </fieldset>
+              {error && <p className=" text-red-500"> {error} </p>}
             </form>
+            <p>
+              Already have an account? Please{" "}
+              <Link className=" text-blue-500 underline">Login</Link>
+            </p>
           </div>
         </div>
       </div>
